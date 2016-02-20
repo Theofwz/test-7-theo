@@ -2,11 +2,15 @@ class Person < ActiveRecord::Base
   extend Enumerize
   MIN_AGE = 0
 
+  has_one   :wifeship,    dependent: :destroy
+  has_one   :husbandship, dependent: :destroy
   has_one   :fathership,  dependent: :destroy
   has_one   :mothership,  dependent: :destroy
 
   has_one   :father,    class_name: Father,   through: :fathership,  source: :member
   has_one   :mother,    class_name: Mother,   through: :mothership,  source: :member
+  has_one   :husband,   class_name: Husband,  through: :husbandship, source: :member
+  has_one   :wife,      class_name: Wife,     through: :wifeship,    source: :member
 
   has_many  :relationships
   has_many  :parentships, dependent: :destroy
