@@ -22,12 +22,14 @@ describe Person do
 
     it { is_expected.to have_many :parentships }
     it { is_expected.to have_many :childrenships }
+    it { is_expected.to have_many :friendships }
 
     it { is_expected.to have_many :parents }
     it { is_expected.to have_many :children }
     it { is_expected.to have_many :sons }
     it { is_expected.to have_many :daughters }
     it { is_expected.to have_many :brothers }
+    it { is_expected.to have_many :friends }
   end
 
   describe 'relationships' do

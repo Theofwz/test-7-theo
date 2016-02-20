@@ -9,12 +9,12 @@ class Person < ActiveRecord::Base
 
   has_one   :father,    class_name: Father,   through: :fathership,  source: :member
   has_one   :mother,    class_name: Mother,   through: :mothership,  source: :member
-
   has_one   :husband,   class_name: Husband,  through: :husbandship, source: :member
   has_one   :wife,      class_name: Wife,     through: :wifeship,    source: :member
 
   has_many  :relationships
   has_many  :parentships, dependent: :destroy
+  has_many  :friendships, dependent: :destroy
   has_many  :childrenships, -> { where(type: [Fathership, Mothership]) }, class_name: Relationship, foreign_key: :member_id
 
   has_many  :parents,   class_name: Parent,   through: :parentships,    source: :member
@@ -22,6 +22,7 @@ class Person < ActiveRecord::Base
   has_many  :daughters, class_name: Daughter, through: :childrenships,  source: :person
   has_many  :children,  class_name: Child,    through: :childrenships,  source: :person
   has_many  :brothers,            -> (object) { where.not(id: object.id).uniq }, class_name: Brother,        source: :sons,    through: :parents
+  has_many  :friends,   class_name: Friend, through: :friendships, source: :member
 
   validates :first_name, presence: true
   validates :last_name,  presence: true
