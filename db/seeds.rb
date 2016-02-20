@@ -20,6 +20,9 @@ sofia   = Person.create!(first_name: 'Sofia',   last_name: 'Fwz', dob: 15.years.
   Mothership.create(person: person, member: lily)
 end
 
+Fathership.create(person: sofia, member: john)
+Mothership.create(person: sofia, member: mina)
+
 Husbandship.create(person: lily, member: john)
 Wifeship.create(person: john, member: lily)
 

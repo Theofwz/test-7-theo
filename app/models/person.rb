@@ -21,10 +21,11 @@ class Person < ActiveRecord::Base
   has_many  :sons,      class_name: Son,      through: :childrenships,  source: :person
   has_many  :daughters, class_name: Daughter, through: :childrenships,  source: :person
   has_many  :children,  class_name: Child,    through: :childrenships,  source: :person
-  has_many  :brothers,            -> (object) { where.not(id: object.id).uniq }, class_name: Brother,        source: :sons,    through: :parents
-  has_many  :friends,   class_name: Friend, through: :friendships, source: :member
-  has_many  :friends_of_friendships,  -> (object) { where.not(member_id: object.id).uniq }, class_name: Relationship, through: :friends, source: :friendships
-  has_many  :friends_of_friends,      class_name: Friend, through: :friends_of_friendships, source: :member
+  has_many  :friends,   class_name: Friend,   through: :friendships, source: :member
+  has_many  :brothers,                -> (object) { where.not(id: object.id).uniq },            class_name: Brother,        source: :sons,    through: :parents
+  has_many  :friends_of_friend_ships, -> (object) { where.not(member_id: object.id).uniq },     class_name: Relationship, through: :friends, source: :friendships
+  has_many  :friends_of_friends,      -> (object) { where.not(id: object.friends.ids).uniq },   class_name: Friend, through: :friends_of_friend_ships, source: :member
+  has_many  :mutual_friends,          -> (object) { where(id: object.friends.ids).uniq },       class_name: Friend, through: :friends_of_friend_ships, source: :member
 
   validates :first_name, presence: true
   validates :last_name,  presence: true
@@ -36,8 +37,10 @@ class Person < ActiveRecord::Base
 
   before_save :set_name
 
-  def mutual_friends(person)
-    friends & person.friends
+  def mother_in_law
+    return nil if father.nil?
+    return nil if father and mother.nil?
+    father.wife
   end
 
   def age

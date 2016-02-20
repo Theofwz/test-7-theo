@@ -53,6 +53,16 @@ describe Person do
       end
     end
 
+    describe 'husband' do
+      let!(:lily)               { create(:person, first_name: 'Lily') }
+      let!(:husbandship)        { create(:husbandship, person: lily, member: alex) }
+
+      it 'returns husband' do
+        p alex.wife
+        expect(lily.husband).to match alex.becomes(Husband)
+      end
+    end
+
     describe '#children, #sons, #brothers' do
       let!(:peter)  { create(:male,   first_name: 'Peter') }
       let!(:anna)   { create(:female, first_name: 'Anna') }
