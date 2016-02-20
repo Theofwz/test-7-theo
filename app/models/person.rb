@@ -23,9 +23,8 @@ class Person < ActiveRecord::Base
   has_many  :children,  class_name: Child,    through: :childrenships,  source: :person
   has_many  :brothers,            -> (object) { where.not(id: object.id).uniq }, class_name: Brother,        source: :sons,    through: :parents
   has_many  :friends,   class_name: Friend, through: :friendships, source: :member
-
   has_many  :friends_of_friendships,  -> (object) { where.not(member_id: object.id).uniq }, class_name: Relationship, through: :friends, source: :friendships
-  has_many  :friends_of_friends,class_name: Friend, through: :friends_of_friendships, source: :member
+  has_many  :friends_of_friends,      class_name: Friend, through: :friends_of_friendships, source: :member
 
   validates :first_name, presence: true
   validates :last_name,  presence: true
@@ -36,6 +35,10 @@ class Person < ActiveRecord::Base
   enumerize :gender, in: [:male, :female], predicates: true
 
   before_save :set_name
+
+  def mutual_friends(person)
+    friends & person.friends
+  end
 
   def age
     ((Date.today - dob) / 365).floor
