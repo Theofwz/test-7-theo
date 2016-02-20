@@ -72,12 +72,42 @@ describe Person do
     end
 
     describe '#friends' do
-      let!(:peter)          { create(:male,   first_name: 'Peter') }
-      let!(:friendships)    { create(:friendships, person: alex, member: peter) }
+      let!(:peter)              { create(:male,   first_name: 'Peter') }
+      let!(:friendships)        { create(:friendships, person: alex, member: peter) }
 
       it 'returns alex s friends' do
         expect(alex.friends).to include peter.becomes(Friend)
         expect(alex.friends.size).to eq 1
+      end
+    end
+
+    describe '#friends_of_friends' do
+      let!(:peter)               { create(:male,   first_name: 'Peter') }
+      let!(:anna)                { create(:female, first_name: 'Anna') }
+
+      before do
+        create(:friendships, person: alex,  member: peter)
+        create(:friendships, person: peter,  member: anna)
+      end
+
+      it 'returns friends of friends' do
+        expect(alex.friends_of_friends).to include anna.becomes(Friend)
+        expect(alex.friends_of_friends.size).to eq 1
+      end
+    end
+
+    describe '#mutual_friends' do
+      let!(:peter)               { create(:male,   first_name: 'Peter') }
+      let!(:anna)                { create(:female, first_name: 'Anna') }
+
+      before do
+        create(:friendships, person: alex,  member: peter)
+        create(:friendships, person: alex,  member: anna)
+        create(:friendships, person: peter,  member: anna)
+      end
+
+      it 'returns mutual friends' do
+        expect(alex.mutual_friends(peter)).to include anna.becomes(Friend)
       end
     end
 
