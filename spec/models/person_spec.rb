@@ -71,6 +71,16 @@ describe Person do
       end
     end
 
+    describe '#friends' do
+      let!(:peter)          { create(:male,   first_name: 'Peter') }
+      let!(:friendships)    { create(:friendships, person: alex, member: peter) }
+
+      it 'returns alex s friends' do
+        expect(alex.friends).to include peter.becomes(Friend)
+        expect(alex.friends.size).to eq 1
+      end
+    end
+
     describe '#children, #sons, #brothers' do
       let!(:peter)  { create(:male,   first_name: 'Peter') }
       let!(:anna)   { create(:female, first_name: 'Anna') }

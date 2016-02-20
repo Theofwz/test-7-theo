@@ -21,7 +21,7 @@ class Person < ActiveRecord::Base
   has_many  :sons,      class_name: Son,      through: :childrenships,  source: :person
   has_many  :daughters, class_name: Daughter, through: :childrenships,  source: :person
   has_many  :children,  class_name: Child,    through: :childrenships,  source: :person
-  has_many  :friends,   class_name: Friend,   through: :friendships, source: :member
+  has_many  :friends,   class_name: Friend,   through: :friendships,    source: :member
   has_many  :brothers,                -> (object) { where.not(id: object.id).uniq },            class_name: Brother,        source: :sons,    through: :parents
   has_many  :friends_of_friend_ships, -> (object) { where.not(member_id: object.id).uniq },     class_name: Relationship, through: :friends, source: :friendships
   has_many  :friends_of_friends,      -> (object) { where.not(id: object.friends.ids).uniq },   class_name: Friend, through: :friends_of_friend_ships, source: :member
