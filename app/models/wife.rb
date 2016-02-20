@@ -1,4 +1,4 @@
-class Wife < Parent
+class Wife < Person
   include Person::Female
 
 end

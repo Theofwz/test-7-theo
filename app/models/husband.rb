@@ -1,4 +1,4 @@
-class Husband < Parent
+class Husband < Person
   include Person::Male
 
 end
