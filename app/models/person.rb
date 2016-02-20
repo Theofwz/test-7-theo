@@ -24,6 +24,9 @@ class Person < ActiveRecord::Base
   has_many  :brothers,            -> (object) { where.not(id: object.id).uniq }, class_name: Brother,        source: :sons,    through: :parents
   has_many  :friends,   class_name: Friend, through: :friendships, source: :member
 
+  has_many  :friends_of_friendships,  -> (object) { where.not(member_id: object.id).uniq }, class_name: Relationship, through: :friends, source: :friendships
+  has_many  :friends_of_friends,class_name: Friend, through: :friends_of_friendships, source: :member
+
   validates :first_name, presence: true
   validates :last_name,  presence: true
   validates :dob,        presence: true
